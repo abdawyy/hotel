@@ -1,0 +1,157 @@
+<?php
+
+return [
+    // Navigation
+    'home' => 'الرئيسية',
+    'rooms' => 'الغرف',
+    'my_bookings' => 'حجوزاتي',
+    'profile' => 'الملف الشخصي',
+    'admin_dashboard' => 'لوحة تحكم الإدارة',
+    'logout' => 'تسجيل الخروج',
+    'login' => 'تسجيل الدخول',
+    'register' => 'التسجيل',
+
+    // Homepage
+    'welcome_to' => 'مرحباً بك في',
+    'experience_luxury' => 'استمتع بالرفاهية والراحة في قلب المدينة. احجز إقامتك المثالية اليوم.',
+    'find_perfect_room' => 'ابحث عن غرفتك المثالية',
+    'featured_rooms' => 'الغرف المميزة',
+    'hotel_amenities' => 'مرافق الفندق',
+    'no_rooms_available' => 'لا توجد غرف متاحة في الوقت الحالي.',
+
+    // Search Form
+    'check_in' => 'تاريخ الوصول',
+    'check_out' => 'تاريخ المغادرة',
+    'adults' => 'بالغين',
+    'children' => 'أطفال',
+    'search' => 'بحث',
+    'search_rooms' => 'بحث عن الغرف',
+
+    // Room Listing
+    'our_rooms' => 'غرفنا',
+    'per_night' => 'لليلة',
+    'guests' => 'الضيوف',
+    'view_details' => 'عرض التفاصيل',
+    'available' => 'متاح',
+    'unavailable' => 'غير متاح',
+    'no_rooms_found' => 'لم يتم العثور على غرف',
+    'adjust_search' => 'يرجى تعديل معايير البحث والمحاولة مرة أخرى.',
+
+    // Room Details
+    'room_details' => 'تفاصيل الغرفة',
+    'room_features' => 'مميزات الغرفة',
+    'amenities' => 'المرافق',
+    'max_guests' => 'الحد الأقصى للضيوف',
+    'max_adults' => 'الحد الأقصى للبالغين',
+    'max_children' => 'الحد الأقصى للأطفال',
+    'total_rooms' => 'إجمالي الغرف',
+    'available_rooms' => 'الغرف المتاحة',
+    'book_this_room' => 'احجز هذه الغرفة',
+    'check_in_date' => 'تاريخ الوصول',
+    'check_out_date' => 'تاريخ المغادرة',
+    'book_now' => 'احجز الآن',
+    'back_to_rooms' => 'العودة إلى الغرف',
+    'similar_rooms' => 'غرف مشابهة',
+
+    // Booking Form
+    'booking_information' => 'معلومات الحجز',
+    'room_type' => 'نوع الغرفة',
+    'room_type_label' => 'نوع الغرفة',
+    'nights' => 'ليالي',
+    'nights_label' => 'ليالي',
+    'guest_information' => 'معلومات الضيف',
+    'full_name' => 'الاسم الكامل',
+    'guest_name' => 'اسم الضيف',
+    'guest_email' => 'بريد الضيف الإلكتروني',
+    'guest_phone' => 'هاتف الضيف',
+    'name' => 'الاسم',
+    'email' => 'البريد الإلكتروني',
+    'phone_number' => 'رقم الهاتف',
+    'address' => 'العنوان',
+    'special_requests' => 'طلبات خاصة',
+    'back' => 'رجوع',
+    'confirm_booking_button' => 'تأكيد الحجز',
+
+    // Booking Summary
+    'booking_summary' => 'ملخص الحجز',
+    'price_per_night' => 'السعر لليلة',
+    'price_per_night_label' => 'السعر لليلة',
+    'subtotal' => 'المجموع الفرعي',
+    'tax' => 'الضريبة',
+    'total' => 'الإجمالي',
+    'rooms_available' => 'غرفة متاحة',
+    'limited_availability' => 'توفر محدود',
+
+    // Booking Confirmation
+    'confirm_booking' => 'تأكيد الحجز',
+    'booking_confirmed' => 'تم تأكيد الحجز',
+    'thank_you' => 'شكراً لك على الحجز',
+    'booking_success' => 'تم تأكيد حجزك بنجاح.',
+    'booking_reference' => 'رقم مرجع الحجز',
+
+    // User Dashboard
+    'my_dashboard' => 'لوحة التحكم',
+    'upcoming_bookings' => 'الحجوزات القادمة',
+    'all_my_bookings' => 'جميع حجوزاتي',
+    'booking_number' => 'رقم الحجز',
+    'status' => 'الحالة',
+    'total_amount' => 'المبلغ الإجمالي',
+    'actions' => 'الإجراءات',
+    'view' => 'عرض',
+    'cancel' => 'إلغاء',
+    'payment_status' => 'حالة الدفع',
+    'paid' => 'مدفوع',
+    'pending' => 'قيد الانتظار',
+    'no_bookings' => 'ليس لديك أي حجوزات بعد.',
+    'browse_rooms' => 'تصفح الغرف',
+    'cancellation_not_allowed' => 'لا يُسمح بالإلغاء خلال 48 ساعة من تاريخ الوصول',
+
+    // Auth
+    'password' => 'كلمة المرور',
+    'confirm_password' => 'تأكيد كلمة المرور',
+    'already_registered' => 'مسجل بالفعل؟',
+    'remember_me' => 'تذكرني',
+    'forgot_password' => 'نسيت كلمة المرور؟',
+    'create_account' => 'إنشاء حساب',
+    'sign_in' => 'تسجيل الدخول',
+    'sign_up' => 'إنشاء حساب',
+
+    // Footer
+    'contact' => 'اتصل بنا',
+    'check_in_check_out' => 'الوصول/المغادرة',
+    'all_rights_reserved' => 'جميع الحقوق محفوظة.',
+    'about_us' => 'من نحن',
+    'privacy_policy' => 'سياسة الخصوصية',
+    'terms_of_service' => 'شروط الخدمة',
+
+    // Booking Status
+    'confirmed' => 'مؤكد',
+    'cancelled' => 'ملغي',
+    'checked_in' => 'تم تسجيل الوصول',
+    'checked_out' => 'تم تسجيل المغادرة',
+    'completed' => 'مكتمل',
+
+    // General
+    'loading' => 'جاري التحميل...',
+    'error' => 'خطأ',
+    'success' => 'نجاح',
+    'warning' => 'تحذير',
+    'close' => 'إغلاق',
+    'submit' => 'إرسال',
+    'save' => 'حفظ',
+    'update' => 'تحديث',
+    'delete' => 'حذف',
+    'edit' => 'تعديل',
+    'confirm' => 'تأكيد',
+    'yes' => 'نعم',
+    'no' => 'لا',
+    'or' => 'أو',
+    'and' => 'و',
+
+    // Errors
+    'page_not_found' => 'الصفحة غير موجودة',
+    'something_went_wrong' => 'حدث خطأ ما',
+    'unauthorized' => 'غير مصرح',
+    'forbidden' => 'محظور',
+    'session_expired' => 'انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى.',
+];

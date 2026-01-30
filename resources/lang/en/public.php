@@ -1,0 +1,157 @@
+<?php
+
+return [
+    // Navigation
+    'home' => 'Home',
+    'rooms' => 'Rooms',
+    'my_bookings' => 'My Bookings',
+    'profile' => 'Profile',
+    'admin_dashboard' => 'Admin Dashboard',
+    'logout' => 'Logout',
+    'login' => 'Login',
+    'register' => 'Register',
+
+    // Homepage
+    'welcome_to' => 'Welcome to',
+    'experience_luxury' => 'Experience luxury and comfort in the heart of the city. Book your perfect stay today.',
+    'find_perfect_room' => 'Find Your Perfect Room',
+    'featured_rooms' => 'Featured Rooms',
+    'hotel_amenities' => 'Hotel Amenities',
+    'no_rooms_available' => 'No rooms available at the moment.',
+
+    // Search Form
+    'check_in' => 'Check-in',
+    'check_out' => 'Check-out',
+    'adults' => 'Adults',
+    'children' => 'Children',
+    'search' => 'Search',
+    'search_rooms' => 'Search Rooms',
+
+    // Room Listing
+    'our_rooms' => 'Our Rooms',
+    'per_night' => 'per night',
+    'guests' => 'Guests',
+    'view_details' => 'View Details',
+    'available' => 'Available',
+    'unavailable' => 'Unavailable',
+    'no_rooms_found' => 'No rooms found',
+    'adjust_search' => 'Please adjust your search criteria and try again.',
+
+    // Room Details
+    'room_details' => 'Room Details',
+    'room_features' => 'Room Features',
+    'amenities' => 'Amenities',
+    'max_guests' => 'Max Guests',
+    'max_adults' => 'Max Adults',
+    'max_children' => 'Max Children',
+    'total_rooms' => 'Total Rooms',
+    'available_rooms' => 'Available Rooms',
+    'book_this_room' => 'Book This Room',
+    'check_in_date' => 'Check-in Date',
+    'check_out_date' => 'Check-out Date',
+    'book_now' => 'Book Now',
+    'back_to_rooms' => 'Back to Rooms',
+    'similar_rooms' => 'Similar Rooms',
+
+    // Booking Form
+    'booking_information' => 'Booking Information',
+    'room_type' => 'Room Type',
+    'room_type_label' => 'Room Type',
+    'nights' => 'Nights',
+    'nights_label' => 'Nights',
+    'guest_information' => 'Guest Information',
+    'full_name' => 'Full Name',
+    'guest_name' => 'Guest Name',
+    'guest_email' => 'Guest Email',
+    'guest_phone' => 'Guest Phone',
+    'name' => 'Name',
+    'email' => 'Email',
+    'phone_number' => 'Phone Number',
+    'address' => 'Address',
+    'special_requests' => 'Special Requests',
+    'back' => 'Back',
+    'confirm_booking_button' => 'Confirm Booking',
+
+    // Booking Summary
+    'booking_summary' => 'Booking Summary',
+    'price_per_night' => 'Price per Night',
+    'price_per_night_label' => 'Price per night',
+    'subtotal' => 'Subtotal',
+    'tax' => 'Tax',
+    'total' => 'Total',
+    'rooms_available' => 'room(s) available',
+    'limited_availability' => 'Limited availability',
+
+    // Booking Confirmation
+    'confirm_booking' => 'Confirm Booking',
+    'booking_confirmed' => 'Booking Confirmed',
+    'thank_you' => 'Thank you for your booking',
+    'booking_success' => 'Your booking has been confirmed successfully.',
+    'booking_reference' => 'Booking Reference',
+
+    // User Dashboard
+    'my_dashboard' => 'My Dashboard',
+    'upcoming_bookings' => 'Upcoming Bookings',
+    'all_my_bookings' => 'All My Bookings',
+    'booking_number' => 'Booking Number',
+    'status' => 'Status',
+    'total_amount' => 'Total Amount',
+    'actions' => 'Actions',
+    'view' => 'View',
+    'cancel' => 'Cancel',
+    'payment_status' => 'Payment Status',
+    'paid' => 'Paid',
+    'pending' => 'Pending',
+    'no_bookings' => 'You don\'t have any bookings yet.',
+    'browse_rooms' => 'Browse Rooms',
+    'cancellation_not_allowed' => 'Cancellation is not allowed within 48 hours of check-in',
+
+    // Auth
+    'password' => 'Password',
+    'confirm_password' => 'Confirm Password',
+    'already_registered' => 'Already registered?',
+    'remember_me' => 'Remember me',
+    'forgot_password' => 'Forgot your password?',
+    'create_account' => 'Create Account',
+    'sign_in' => 'Sign In',
+    'sign_up' => 'Sign Up',
+
+    // Footer
+    'contact' => 'Contact',
+    'check_in_check_out' => 'Check-in/Check-out',
+    'all_rights_reserved' => 'All rights reserved.',
+    'about_us' => 'About Us',
+    'privacy_policy' => 'Privacy Policy',
+    'terms_of_service' => 'Terms of Service',
+
+    // Booking Status
+    'confirmed' => 'Confirmed',
+    'cancelled' => 'Cancelled',
+    'checked_in' => 'Checked In',
+    'checked_out' => 'Checked Out',
+    'completed' => 'Completed',
+
+    // General
+    'loading' => 'Loading...',
+    'error' => 'Error',
+    'success' => 'Success',
+    'warning' => 'Warning',
+    'close' => 'Close',
+    'submit' => 'Submit',
+    'save' => 'Save',
+    'update' => 'Update',
+    'delete' => 'Delete',
+    'edit' => 'Edit',
+    'confirm' => 'Confirm',
+    'yes' => 'Yes',
+    'no' => 'No',
+    'or' => 'or',
+    'and' => 'and',
+
+    // Errors
+    'page_not_found' => 'Page Not Found',
+    'something_went_wrong' => 'Something went wrong',
+    'unauthorized' => 'Unauthorized',
+    'forbidden' => 'Forbidden',
+    'session_expired' => 'Your session has expired. Please log in again.',
+];
