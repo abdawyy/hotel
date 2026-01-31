@@ -11,12 +11,7 @@
                     <h5 class="mb-0"><i class="bi bi-person-circle"></i> My Profile</h5>
                 </div>
                 <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    @endif
+
 
                     <form method="POST" action="{{ route('user.profile.update') }}">
                         @csrf

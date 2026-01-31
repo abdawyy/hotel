@@ -172,9 +172,7 @@
                     </div>
 
                     @if($availableCount > 0)
-                        <div class="alert alert-success mb-0">
-                            <i class="bi bi-check-circle"></i> {{ $availableCount }} {{ __('public.rooms_available') }}
-                        </div>
+
                     @else
                         <div class="alert alert-warning mb-0">
                             <i class="bi bi-exclamation-triangle"></i> {{ __('public.limited_availability') }}
