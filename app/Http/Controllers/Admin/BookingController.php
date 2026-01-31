@@ -14,6 +14,8 @@ use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingStatusChanged;
 
 class BookingController extends Controller
 {
@@ -126,6 +128,11 @@ class BookingController extends Controller
             }
 
             DB::commit();
+
+            // Send booking created email
+            try {
+                Mail::to($booking->guest_email)->send(new BookingStatusChanged($booking, 'Your booking has been created by admin and is now ' . ucfirst($booking->status) . '.'));
+            } catch (\Exception $e) {}
 
             return redirect()->route('admin.bookings.show', $booking->id)
                 ->with('success', 'Booking created successfully.');
@@ -316,6 +323,11 @@ class BookingController extends Controller
 
             DB::commit();
 
+            // Send booking updated email
+            try {
+                Mail::to($booking->guest_email)->send(new BookingStatusChanged($booking, 'Your booking details have been updated by admin. Current status: ' . ucfirst($booking->status) . '.'));
+            } catch (\Exception $e) {}
+
             return redirect()->route('admin.bookings.show', $booking->id)
                 ->with('success', 'Booking updated successfully.');
 
@@ -382,6 +394,11 @@ class BookingController extends Controller
             }
 
             DB::commit();
+
+            // Send booking status changed email
+            try {
+                Mail::to($booking->guest_email)->send(new BookingStatusChanged($booking, 'Your booking status has been changed to ' . ucfirst($booking->status) . '.'));
+            } catch (\Exception $e) {}
 
             return redirect()->back()
                 ->with('success', 'Booking status updated successfully.');
@@ -510,6 +527,11 @@ class BookingController extends Controller
             }
 
             DB::commit();
+
+            // Send booking cancelled email
+            try {
+                Mail::to($booking->guest_email)->send(new BookingStatusChanged($booking, 'Your booking has been cancelled by admin.'));
+            } catch (\Exception $e) {}
 
             return redirect()->back()
                 ->with('success', 'Booking cancelled successfully.');

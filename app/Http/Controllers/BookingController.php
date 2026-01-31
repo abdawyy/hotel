@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingStatusChanged;
 
 class BookingController extends Controller
 {
@@ -125,6 +127,11 @@ class BookingController extends Controller
                 'special_requests' => $validated['special_requests'] ?? null,
             ]);
 
+            // Send booking created email
+            try {
+                Mail::to($booking->guest_email)->send(new BookingStatusChanged($booking, 'Your booking has been created and is pending confirmation.'));
+            } catch (\Exception $e) {}
+
             // Find and assign available room
             $availableRoom = Room::available()
                 ->ofType($roomType->id)
@@ -232,6 +239,10 @@ class BookingController extends Controller
 
             DB::commit();
 
+            // Send booking cancelled email
+            try {
+                Mail::to($booking->guest_email)->send(new BookingStatusChanged($booking, 'Your booking has been cancelled.'));
+            } catch (\Exception $e) {}
             return redirect()->route('user.dashboard')
                 ->with('success', 'Booking cancelled successfully.');
 
