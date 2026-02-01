@@ -86,8 +86,15 @@ class RoomController extends Controller
             if ($request->hasFile('images')) {
                 $primarySet = false;
                 foreach ($request->file('images') as $index => $image) {
-                    $path = $image->store('room-images', 'public');
-                    
+                    // Save directly to the real public_html/storage/room-images
+                    $filename = uniqid().'.'.$image->getClientOriginalExtension();
+                    $publicPath = $_SERVER['DOCUMENT_ROOT'] . '/public/storage/room-images';
+                    if (!file_exists($publicPath)) {
+                        mkdir($publicPath, 0777, true);
+                    }
+                    $image->move($publicPath, $filename);
+                    $path = 'room-images/' . $filename;
+
                     RoomImage::create([
                         'room_type_id' => $roomType->id,
                         'image_path' => $path,
@@ -238,8 +245,14 @@ class RoomController extends Controller
             if ($request->hasFile('images')) {
                 $lastOrder = $roomType->images()->max('display_order') ?? -1;
                 foreach ($request->file('images') as $index => $image) {
-                    $path = $image->store('room-images', 'public');
-                    
+                    // Save directly to the real public_html/storage/room-images
+                    $filename = uniqid().'.'.$image->getClientOriginalExtension();
+                    $publicPath = $_SERVER['DOCUMENT_ROOT'] . '/public/storage/room-images';
+                    if (!file_exists($publicPath)) {
+                        mkdir($publicPath, 0777, true);
+                    }
+                    $image->move($publicPath, $filename);
+                    $path = 'room-images/' . $filename;
                     RoomImage::create([
                         'room_type_id' => $roomType->id,
                         'image_path' => $path,
