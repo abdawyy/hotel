@@ -59,7 +59,7 @@ class RoomController extends Controller
             'amenities' => 'nullable|array',
             'amenities.*' => 'exists:amenities,id',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:100120',
         ]);
 
         DB::beginTransaction();
