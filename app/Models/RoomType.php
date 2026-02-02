@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Carbon\Carbon;
 
 class RoomType extends Model
 {
@@ -90,33 +89,24 @@ class RoomType extends Model
 
     /**
      * Get available rooms count for a date range.
+     * Uses total_rooms as the cap: only that many can be reserved at the same time.
+     * If all total_rooms are already booked for overlapping dates, returns 0.
      */
+    public function getAvailableRoomsCount($checkIn, $checkOut): int
+    {
+        $totalRooms = (int) $this->total_rooms;
 
-public function getAvailableRoomsCount($checkIn, $checkOut): int
-{
-    // 1. Ensure dates are parsed to Carbon for safe comparison
-    $start = Carbon::parse($checkIn)->startOfDay();
-    $end = Carbon::parse($checkOut)->startOfDay();
+        // Count how many rooms of this type are already booked for overlapping dates
+        // Overlap: booking.check_in < requested.check_out AND booking.check_out > requested.check_in
+        $bookedCount = (int) BookingDetail::where('room_type_id', $this->id)
+            ->whereHas('booking', function ($query) use ($checkIn, $checkOut) {
+                $query->where('check_in_date', '<', $checkOut)
+                    ->where('check_out_date', '>', $checkIn)
+                    ->whereNotIn('status', ['cancelled', 'checked_out']);
+            })
+            ->sum('quantity');
 
-    // 2. Count occupied rooms (Quantity summed from overlapping bookings)
-    $bookedCount = BookingDetail::where('room_type_id', $this->id)
-        ->whereHas('booking', function($query) use ($start, $end) {
-            $query->where('check_in_date', '<', $end)
-                  ->where('check_out_date', '>', $start)
-                  ->whereNotIn('status', ['cancelled', 'checked_out', 'failed']);
-        })
-        ->sum('quantity');
-
-    // 3. Get total physical inventory for this room type
-    // IMPORTANT: Don't just filter by 'available' status if that status 
-    // changes based on current occupancy. Use total capacity instead.
-    $totalInventory = $this->rooms()
-        ->where('status', '!=', 'out_of_service') // Exclude rooms under maintenance
-        ->count();
-
-    // 4. Calculate final count
-    $available = $totalInventory - $bookedCount;
-
-    return (int) max(0, $available);
-}
+        // Available = total_rooms minus already booked; if full, return 0
+        return max(0, $totalRooms - $bookedCount);
+    }
 }
