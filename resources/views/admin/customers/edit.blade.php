@@ -78,7 +78,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="sticky-top" style="top: 2rem;">
+                <div>
                     <div class="card border-0 shadow-sm rounded-4 bg-dark text-white mb-4">
                         <div class="card-body p-4 text-center">
                             <div class="bg-white bg-opacity-10 rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">

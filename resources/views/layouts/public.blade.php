@@ -139,7 +139,7 @@
     @stack('styles')
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('home') }}">
                 <i class="bi bi-stars text-primary"></i> 

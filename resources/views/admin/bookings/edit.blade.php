@@ -120,7 +120,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="sticky-top" style="top: 2rem;">
+                <div>
                     
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
                         <div class="card-body p-4">

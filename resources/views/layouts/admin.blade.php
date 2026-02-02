@@ -194,7 +194,7 @@
             </div>
             
             <div class="col-md-10 p-0">
-                <nav class="navbar navbar-expand navbar-light sticky-top">
+                <nav class="navbar navbar-expand navbar-light">
                     <div class="container-fluid">
                         <span class="navbar-brand mb-0 h1 fw-bold fs-5">@yield('page-title', __('admin.dashboard'))</span>
                         

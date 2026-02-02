@@ -88,7 +88,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="sticky-top" style="top: 2rem;">
+                <div>
                     <div class="card border-0 shadow-sm rounded-4 bg-dark text-white mb-4">
                         <div class="card-body p-4">
                             <h6 class="text-uppercase fw-bold opacity-50 small mb-4">Customer Status</h6>
