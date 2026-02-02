@@ -67,7 +67,12 @@ class RoomController extends Controller
             ->take(4)
             ->get();
 
-        return view('public.rooms.show', compact('roomType', 'similarRooms'));
+        // Dates with zero availability (for disabling reserved days in calendar)
+        $today = Carbon::today();
+        $rangeEnd = $today->copy()->addYear();
+        $unavailableDates = $roomType->getUnavailableDates($today, $rangeEnd);
+
+        return view('public.rooms.show', compact('roomType', 'similarRooms', 'unavailableDates'));
     }
 
     /**

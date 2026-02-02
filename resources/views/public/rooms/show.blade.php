@@ -95,14 +95,14 @@
                         
                         <div class="mb-3">
                             <label for="check_in" class="form-label">{{ __('public.check_in_date') }}</label>
-                            <input type="date" class="form-control" id="check_in" name="check_in" 
-                                   min="{{ date('Y-m-d') }}" value="{{ request('check_in') }}" required>
+                            <input type="text" class="form-control" id="check_in" name="check_in" readonly
+                                   placeholder="{{ __('public.check_in_date') }}" value="{{ request('check_in') }}" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="check_out" class="form-label">{{ __('public.check_out_date') }}</label>
-                            <input type="date" class="form-control" id="check_out" name="check_out" 
-                                   min="{{ date('Y-m-d', strtotime('+1 day')) }}" value="{{ request('check_out') }}" required>
+                            <input type="text" class="form-control" id="check_out" name="check_out" readonly
+                                   placeholder="{{ __('public.check_out_date') }}" value="{{ request('check_out') }}" required>
                         </div>
 
                         <div class="mb-3">
@@ -169,20 +169,70 @@
     @endif
 </div>
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
+
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-    // Update check-out min date when check-in changes
-    document.getElementById('check_in')?.addEventListener('change', function() {
-        const checkInDate = new Date(this.value);
-        checkInDate.setDate(checkInDate.getDate() + 1);
-        const checkOutInput = document.getElementById('check_out');
-        if (checkOutInput) {
-            checkOutInput.min = checkInDate.toISOString().split('T')[0];
-            if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
-                checkOutInput.value = '';
-            }
+(function() {
+    // Only dates that exceed reservation limit (fully booked nights) - from backend
+    var unavailableDates = @json($unavailableDates ?? []);
+    var today = '{{ date('Y-m-d') }}';
+
+    function dateStr(d) {
+        if (typeof d === 'string') return d;
+        if (!d || !d.getTime) return '';
+        var y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, '0'), day = String(d.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + day;
+    }
+    function addDayStr(s) {
+        var d = new Date(s + 'T12:00:00');
+        d.setDate(d.getDate() + 1);
+        return dateStr(d);
+    }
+    // Check-out date D invalid if the night before (D-1) is fully booked
+    var disabledCheckOutBase = unavailableDates.map(function(d) { return addDayStr(d); });
+
+    var checkInEl = document.getElementById('check_in');
+    var checkOutEl = document.getElementById('check_out');
+    if (!checkInEl || !checkOutEl) return;
+
+    // Pass array of date strings so Flatpickr disables ONLY those specific dates (not the whole calendar)
+    var checkOutFp;
+    var checkInFp = flatpickr(checkInEl, {
+        minDate: today,
+        dateFormat: 'Y-m-d',
+        disable: unavailableDates,
+        onChange: function(sel, dateStrVal) {
+            if (!dateStrVal) return;
+            checkOutFp.set('minDate', dateStrVal);
+            checkOutFp.set('disable', function(d) {
+                var dStr = dateStr(d);
+                if (!dStr || dStr <= dateStrVal) return true;
+                var current = new Date(dateStrVal + 'T12:00:00');
+                while (dateStr(current) < dStr) {
+                    if (unavailableDates.indexOf(dateStr(current)) !== -1) return true;
+                    current.setDate(current.getDate() + 1);
+                }
+                return false;
+            });
+            if (checkOutEl.value && checkOutEl.value <= dateStrVal) checkOutFp.clear();
         }
     });
+
+    checkOutFp = flatpickr(checkOutEl, {
+        minDate: today,
+        dateFormat: 'Y-m-d',
+        disable: disabledCheckOutBase,
+        onChange: function() {}
+    });
+
+    if (checkInEl.value && checkInFp.selectedDates.length) {
+        checkInFp.config.onChange(checkInFp.selectedDates, checkInEl.value);
+    }
+})();
 </script>
 @endpush
 @endsection

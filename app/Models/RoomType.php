@@ -109,4 +109,52 @@ class RoomType extends Model
         // Available = total_rooms minus already booked; if full, return 0
         return max(0, $totalRooms - $bookedCount);
     }
+
+    /**
+     * Get only the specific dates where reservations exceed the limit (fully booked that night).
+     * Used to disable only those dates in the calendar; all other dates stay selectable.
+     *
+     * @param  \Carbon\Carbon|string  $from  Start date (inclusive)
+     * @param  \Carbon\Carbon|string  $to    End date (inclusive)
+     * @return array Array of date strings (Y-m-d) - only nights with zero availability
+     */
+    public function getUnavailableDates($from, $to): array
+    {
+        $from = \Carbon\Carbon::parse($from)->startOfDay();
+        $to = \Carbon\Carbon::parse($to)->endOfDay();
+        $totalRooms = (int) $this->total_rooms;
+        if ($totalRooms < 1) {
+            return [];
+        }
+
+        $details = BookingDetail::where('room_type_id', $this->id)
+            ->whereHas('booking', function ($query) use ($from, $to) {
+                $query->where('check_in_date', '<', $to)
+                    ->where('check_out_date', '>', $from)
+                    ->whereNotIn('status', ['cancelled', 'checked_out']);
+            })
+            ->with('booking:id,check_in_date,check_out_date')
+            ->get(['id', 'booking_id', 'quantity']);
+
+        $unavailable = [];
+        $current = $from->copy();
+        while ($current <= $to) {
+            $date = $current->format('Y-m-d');
+            $booked = 0;
+            foreach ($details as $d) {
+                $checkIn = \Carbon\Carbon::parse($d->booking->check_in_date);
+                $checkOut = \Carbon\Carbon::parse($d->booking->check_out_date);
+                if ($checkIn->format('Y-m-d') <= $date && $checkOut->format('Y-m-d') > $date) {
+                    $booked += (int) $d->quantity;
+                }
+            }
+            // Only add this date when it exceeds the limit (no rooms left for that night)
+            if ($booked >= $totalRooms) {
+                $unavailable[] = $date;
+            }
+            $current->addDay();
+        }
+
+        return $unavailable;
+    }
 }
