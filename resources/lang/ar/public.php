@@ -36,6 +36,9 @@ return [
     'unavailable' => 'غير متاح',
     'no_rooms_found' => 'لم يتم العثور على غرف',
     'adjust_search' => 'يرجى تعديل معايير البحث والمحاولة مرة أخرى.',
+    'showing_available_rooms' => 'عرض الغرف المتاحة لـ',
+    'clear_search' => 'مسح البحث',
+    'nights' => 'ليالي',
 
     // Room Details
     'room_details' => 'تفاصيل الغرفة',

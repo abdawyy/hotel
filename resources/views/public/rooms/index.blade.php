@@ -36,16 +36,39 @@
         </div>
     </div>
 
+    @if(isset($hasDateFilter) && $hasDateFilter)
+    <!-- Search Summary -->
+    <div class="alert alert-light border d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <i class="bi bi-calendar-check text-primary me-2"></i>
+            <strong>{{ __('public.showing_available_rooms') }}:</strong>
+            {{ $checkIn->format('M d, Y') }} - {{ $checkOut->format('M d, Y') }}
+            ({{ $checkIn->diffInDays($checkOut) }} {{ __('public.nights') }})
+            @if(request('adults', 1) > 0 || request('children', 0) > 0)
+                <span class="ms-2">
+                    <i class="bi bi-people me-1"></i>
+                    {{ request('adults', 1) }} {{ __('public.adults') }}
+                    @if(request('children', 0) > 0)
+                        , {{ request('children') }} {{ __('public.children') }}
+                    @endif
+                </span>
+            @endif
+        </div>
+        <a href="{{ route('rooms.index') }}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-x-lg"></i> {{ __('public.clear_search') }}
+        </a>
+    </div>
+    @endif
+
     <!-- Rooms Grid -->
     <div class="row g-4">
         @forelse($rooms as $room)
             @php
-                $isAvailable = true;
-                if (request('check_in') && request('check_out')) {
-                    $checkIn = \Carbon\Carbon::parse(request('check_in'));
-                    $checkOut = \Carbon\Carbon::parse(request('check_out'));
-                    $isAvailable = $room->getAvailableRoomsCount($checkIn, $checkOut) > 0;
-                }
+                // Use pre-calculated availability if dates were provided
+                $availableCount = isset($hasDateFilter) && $hasDateFilter 
+                    ? ($room->available_count ?? $room->getAvailableRoomsCount($checkIn, $checkOut))
+                    : $room->total_rooms;
+                $isAvailable = $availableCount > 0;
             @endphp
             <div class="col-md-4">
                 <div class="card h-100 shadow-sm {{ !$isAvailable ? 'opacity-50' : '' }}">
@@ -66,16 +89,15 @@
                             <span class="h5 text-primary mb-0">{{ \App\Models\Setting::getValue('currency_symbol', '$') }}{{ number_format($room->price_per_night, 2) }}/{{ __('public.per_night') }}</span>
                             <span class="badge bg-info"><i class="bi bi-people"></i> {{ $room->max_guests }} {{ __('public.guests') }}</span>
                         </div>
-                        @php
-                            $availableCount = request('check_in') && request('check_out') 
-                                ? $room->getAvailableRoomsCount(\Carbon\Carbon::parse(request('check_in')), \Carbon\Carbon::parse(request('check_out'))) 
-                                : $room->rooms()->where('status', 'available')->count();
-                        @endphp
                         <div class="mb-3">
-                            <span class="badge bg-success"><i class="bi bi-door-open"></i> {{ $availableCount }} {{ __('public.available') }}</span>
+                            @if($isAvailable)
+                                <span class="badge bg-success"><i class="bi bi-door-open"></i> {{ $availableCount }} {{ __('public.available') }}</span>
+                            @else
+                                <span class="badge bg-danger"><i class="bi bi-x-circle"></i> {{ __('public.unavailable') }}</span>
+                            @endif
                         </div>
                         @if($isAvailable)
-                            <a href="{{ route('rooms.show', $room->id) }}" class="btn btn-primary w-100">{{ __('public.view_details') }}</a>
+                            <a href="{{ route('rooms.show', $room->id) }}{{ (isset($hasDateFilter) && $hasDateFilter) ? '?check_in=' . request('check_in') . '&check_out=' . request('check_out') . '&adults=' . request('adults', 1) . '&children=' . request('children', 0) : '' }}" class="btn btn-primary w-100">{{ __('public.view_details') }}</a>
                         @else
                             <button class="btn btn-secondary w-100" disabled>{{ __('public.unavailable') }}</button>
                         @endif

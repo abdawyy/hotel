@@ -17,7 +17,16 @@ class RoomController extends Controller
     {
         $query = RoomType::active()->with(['primaryImage', 'images', 'amenities']);
 
-        // Don't filter by availability here, show all and check in view
+        // Parse check-in and check-out dates
+        $checkIn = null;
+        $checkOut = null;
+        $hasDateFilter = false;
+
+        if ($request->filled('check_in') && $request->filled('check_out')) {
+            $checkIn = Carbon::parse($request->check_in);
+            $checkOut = Carbon::parse($request->check_out);
+            $hasDateFilter = true;
+        }
 
         // Filter by max guests
         if ($request->filled('adults')) {
@@ -39,11 +48,24 @@ class RoomController extends Controller
             $query->where('price_per_night', '<=', $request->max_price);
         }
 
+        // Filter by availability if dates are provided
+        if ($hasDateFilter) {
+            $query->availableBetween($checkIn, $checkOut);
+        }
+
         $rooms = $query->orderBy('price_per_night', 'asc')->paginate(12);
+
+        // Calculate available count for each room when dates are provided
+        if ($hasDateFilter) {
+            $rooms->getCollection()->transform(function ($room) use ($checkIn, $checkOut) {
+                $room->available_count = $room->getAvailableRoomsCount($checkIn, $checkOut);
+                return $room;
+            });
+        }
 
         $amenities = Amenity::orderBy('name')->get();
 
-        return view('public.rooms.index', compact('rooms', 'amenities'));
+        return view('public.rooms.index', compact('rooms', 'amenities', 'checkIn', 'checkOut', 'hasDateFilter'));
     }
 
     /**
