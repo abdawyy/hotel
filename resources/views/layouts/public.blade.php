@@ -1,10 +1,18 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ \App\Http\Controllers\LanguageController::isRtl(app()->getLocale()) ? 'rtl' : 'ltr' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ \App\Http\Controllers\LanguageController::isRtl(app()->getLocale()) ? 'rtl' : 'ltr' }}" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', config('app.name', 'Hotel Reservation'))</title>
+    
+    <!-- Prevent FOUC by setting theme immediately -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,34 +24,64 @@
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
             --bg-navbar: #0f172a; 
             --bg-footer: #0f172a;
             --text-primary: #1e293b;
             --text-secondary: #64748b;
+            --text-muted: #94a3b8;
             --border-color: #e2e8f0;
             --card-bg: #ffffff;
+            --card-header-bg: #f8fafc;
+            --input-bg: #ffffff;
             --logout-red: #fb7185;
-            --accent-color: #3b82f6; /* Modern Blue */
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #06b6d4;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --table-stripe-bg: #f8fafc;
+            --dropdown-bg: #ffffff;
+            --modal-bg: #ffffff;
+            --alert-bg: #f8fafc;
         }
         
         [data-theme="dark"] {
-            --bg-primary: #020617;
-            --bg-secondary: #0f172a;
-            --bg-navbar: #000000;
-            --bg-footer: #000000;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-navbar: #020617;
+            --bg-footer: #020617;
             --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border-color: #1e293b;
-            --card-bg: #0f172a;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --card-bg: #1e293b;
+            --card-header-bg: #334155;
+            --input-bg: #1e293b;
             --logout-red: #f43f5e;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --table-stripe-bg: #334155;
+            --dropdown-bg: #1e293b;
+            --modal-bg: #1e293b;
+            --alert-bg: #1e293b;
+        }
+        
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
         }
         
         body {
             background-color: var(--bg-primary);
             color: var(--text-primary);
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            transition: background 0.3s ease;
         }
+        
+        /* Text Colors */
+        .text-muted { color: var(--text-muted) !important; }
+        .text-secondary { color: var(--text-secondary) !important; }
+        p, span, label, small { color: inherit; }
         
         /* Navbar Upgrade */
         .navbar {
@@ -86,31 +124,79 @@
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
             border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 25px 50px -12px var(--shadow-color);
             padding: 30px;
         }
 
-        /* Elements Styling */
+        /* Card Styling */
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background-color: var(--card-bg) !important;
+            border: 1px solid var(--border-color) !important;
             border-radius: 20px;
             overflow: hidden;
             transition: transform 0.3s ease;
+            color: var(--text-primary);
         }
         
         .card:hover {
             transform: translateY(-5px);
         }
         
-        .form-control, .form-select {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+        .card-body {
+            background-color: var(--card-bg);
             color: var(--text-primary);
+        }
+        
+        .card-header {
+            background-color: var(--card-header-bg) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            color: var(--text-primary);
+        }
+        
+        .card-footer {
+            background-color: var(--card-header-bg) !important;
+            border-top: 1px solid var(--border-color) !important;
+        }
+        
+        .card-title, .card-text {
+            color: var(--text-primary);
+        }
+        
+        /* Form Elements */
+        .form-control, .form-select {
+            background-color: var(--input-bg) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-primary) !important;
             padding: 0.75rem 1rem;
             border-radius: 12px;
         }
         
+        .form-control:focus, .form-select:focus {
+            background-color: var(--input-bg) !important;
+            border-color: var(--accent-color) !important;
+            color: var(--text-primary) !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-muted) !important;
+        }
+        
+        .form-label {
+            color: var(--text-primary);
+        }
+        
+        .form-text {
+            color: var(--text-muted) !important;
+        }
+        
+        .input-group-text {
+            background-color: var(--bg-secondary) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Buttons */
         .btn-primary {
             background-color: var(--accent-color);
             border: none;
@@ -118,13 +204,263 @@
             border-radius: 12px;
             font-weight: 600;
         }
+        
+        .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--text-secondary);
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .btn-light {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .btn-light:hover {
+            background-color: var(--bg-tertiary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
 
-        /* Dropdown Polishing */
+        /* Dropdown */
         .dropdown-menu {
-            border: none;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            background-color: var(--dropdown-bg) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: 0 10px 40px var(--shadow-color);
             border-radius: 16px;
             padding: 0.75rem;
+        }
+        
+        .dropdown-item {
+            color: var(--text-primary) !important;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+        }
+        
+        .dropdown-item:hover, .dropdown-item:focus {
+            background-color: var(--bg-secondary) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        .dropdown-item.active {
+            background-color: var(--accent-color) !important;
+            color: #fff !important;
+        }
+        
+        .dropdown-divider {
+            border-color: var(--border-color);
+        }
+        
+        /* Tables */
+        .table {
+            color: var(--text-primary);
+            --bs-table-bg: var(--card-bg);
+            --bs-table-striped-bg: var(--table-stripe-bg);
+            --bs-table-hover-bg: var(--bg-secondary);
+            --bs-table-border-color: var(--border-color);
+        }
+        
+        .table th {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: var(--border-color) !important;
+        }
+        
+        .table td {
+            border-color: var(--border-color) !important;
+            color: var(--text-primary);
+        }
+        
+        .table-striped > tbody > tr:nth-of-type(odd) > * {
+            background-color: var(--table-stripe-bg);
+            color: var(--text-primary);
+        }
+        
+        /* Alerts */
+        .alert {
+            border-radius: 12px;
+        }
+        
+        .alert-light {
+            background-color: var(--alert-bg) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        .alert-info {
+            background-color: rgba(6, 182, 212, 0.1) !important;
+            border-color: rgba(6, 182, 212, 0.3) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        .alert-success {
+            background-color: rgba(16, 185, 129, 0.1) !important;
+            border-color: rgba(16, 185, 129, 0.3) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        .alert-warning {
+            background-color: rgba(245, 158, 11, 0.1) !important;
+            border-color: rgba(245, 158, 11, 0.3) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        .alert-danger {
+            background-color: rgba(239, 68, 68, 0.1) !important;
+            border-color: rgba(239, 68, 68, 0.3) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        /* Modals */
+        .modal-content {
+            background-color: var(--modal-bg) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-primary);
+        }
+        
+        .modal-header {
+            border-bottom-color: var(--border-color) !important;
+        }
+        
+        .modal-footer {
+            border-top-color: var(--border-color) !important;
+        }
+        
+        .btn-close {
+            filter: var(--bs-btn-close-white-filter);
+        }
+        
+        [data-theme="dark"] .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+        
+        /* List Groups */
+        .list-group-item {
+            background-color: var(--card-bg) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        /* Badges */
+        .badge.bg-light {
+            background-color: var(--bg-secondary) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: transparent;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--accent-color);
+        }
+        
+        .breadcrumb-item.active {
+            color: var(--text-muted);
+        }
+        
+        /* Pagination */
+        .page-link {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .page-link:hover {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        .page-item.disabled .page-link {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-muted);
+        }
+        
+        /* HR */
+        hr {
+            border-color: var(--border-color);
+            opacity: 0.5;
+        }
+        
+        /* Override text-dark for dark mode compatibility */
+        .text-dark {
+            color: var(--text-primary) !important;
+        }
+        
+        .text-body {
+            color: var(--text-primary) !important;
+        }
+        
+        .link-dark {
+            color: var(--text-primary) !important;
+        }
+        
+        .link-dark:hover {
+            color: var(--accent-color) !important;
+        }
+
+        /* Background Utilities */
+        .bg-light {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        .bg-white {
+            background-color: var(--card-bg) !important;
+        }
+        
+        .border {
+            border-color: var(--border-color) !important;
+        }
+        
+        .border-light {
+            border-color: var(--border-color) !important;
+        }
+        
+        /* Accordion */
+        .accordion-item {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+        }
+        
+        .accordion-button {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .accordion-body {
+            background-color: var(--card-bg);
+        }
+        
+        /* Toast */
+        .toast {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .toast-header {
+            background-color: var(--card-header-bg);
+            border-bottom-color: var(--border-color);
+            color: var(--text-primary);
         }
 
         /* Footer Polishing */
@@ -152,15 +488,22 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center gap-2">
                     <li class="nav-item">
-                        <a class="nav-link px-3" href="{{ route('home') }}">{{ __('public.home') }}</a>
+                        <a class="nav-link text-white px-3" href="{{ route('home') }}">{{ __('public.home') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link px-3" href="{{ route('rooms.index') }}">{{ __('public.rooms') }}</a>
+                        <a class="nav-link text-white px-3" href="{{ route('rooms.index') }}">{{ __('public.rooms') }}</a>
                     </li>
 
                     @auth
+                        @if(Auth::user()->isAdmin())
+                            <li class="nav-item">
+                                <a class="nav-link text-warning fw-semibold px-3" href="{{ route('admin.dashboard') }}">
+                                    <i class="bi bi-shield-lock me-1"></i>{{ __('public.admin_panel') ?? 'Admin' }}
+                                </a>
+                            </li>
+                        @endif
                         <li class="nav-item dropdown ms-lg-2">
-                            <a class="nav-link dropdown-toggle bg-white bg-opacity-10 rounded-pill px-4" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle text-white  bg-opacity-10 rounded-pill px-4" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                                 {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end mt-2 animate-slide-in">
@@ -178,7 +521,7 @@
                             </ul>
                         </li>
                     @else
-                        <li class="nav-item ms-lg-3"><a class="nav-link" href="{{ route('login') }}">{{ __('public.login') }}</a></li>
+                        <li class="nav-item ms-lg-3"><a class="nav-link text-white" href="{{ route('login') }}">{{ __('public.login') }}</a></li>
                         <li class="nav-item">
                             <a class="btn btn-primary px-4" href="{{ route('register') }}">{{ __('public.register') }}</a>
                         </li>
@@ -187,7 +530,7 @@
                     <div class="d-flex align-items-center ms-lg-4 gap-3 ps-lg-3 border-start border-white border-opacity-10">
                         <!-- Language Switcher -->
                         <div class="dropdown">
-                            <button class="btn btn-sm text-light px-3 bg-white bg-opacity-10 rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-sm text-white px-3  bg-opacity-10 rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-globe2 me-1"></i> 
                                 @php
                                     $languages = \App\Http\Controllers\LanguageController::getAvailableLanguages();
@@ -211,8 +554,8 @@
                             </ul>
                         </div>
                         <!-- Theme Toggle -->
-                        <button class="btn btn-sm text-light px-2 bg-white bg-opacity-10 rounded-circle" id="themeToggle" type="button" style="width:35px; height:35px">
-                            <i class="bi bi-sun-fill" id="themeIcon"></i>
+                        <button class="btn btn-sm text-white px-2 bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" id="themeToggle" type="button" style="width:38px; height:38px" title="Toggle dark mode">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
                         </button>
                     </div>
                 </ul>
@@ -309,7 +652,7 @@
                 const themeIcon = document.getElementById('themeIcon');
                 
                 const updateUI = (theme) => {
-                    themeIcon.className = theme === 'dark' ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+                    themeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
                 };
                 
                 updateUI(savedTheme);

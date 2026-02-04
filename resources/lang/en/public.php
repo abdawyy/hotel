@@ -7,6 +7,7 @@ return [
     'my_bookings' => 'My Bookings',
     'profile' => 'Profile',
     'admin_dashboard' => 'Admin Dashboard',
+    'admin_panel' => 'Admin',
     'logout' => 'Logout',
     'login' => 'Login',
     'register' => 'Register',
