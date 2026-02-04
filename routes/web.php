@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PayPalController;
+use App\Http\Controllers\StripeController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\RoomController as AdminRoomController;
@@ -42,6 +44,18 @@ Route::post('/rooms/check-availability', [RoomController::class, 'checkAvailabil
 Route::get('/booking/create', [BookingController::class, 'create'])->name('booking.create');
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/confirmation/{id}', [BookingController::class, 'confirmation'])->name('booking.confirmation');
+
+// PayPal Payment Routes
+Route::get('/booking/{id}/payment', [PayPalController::class, 'showPayment'])->name('paypal.payment');
+Route::post('/paypal/create-order', [PayPalController::class, 'createOrder'])->name('paypal.create-order');
+Route::post('/paypal/capture-order', [PayPalController::class, 'captureOrder'])->name('paypal.capture-order');
+Route::get('/paypal/capture', [PayPalController::class, 'capture'])->name('paypal.capture');
+Route::get('/paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
+
+// Stripe Payment Routes
+Route::post('/stripe/create-payment-intent', [StripeController::class, 'createPaymentIntent'])->name('stripe.create-payment-intent');
+Route::post('/stripe/confirm-payment', [StripeController::class, 'confirmPayment'])->name('stripe.confirm-payment');
+Route::post('/stripe/webhook', [StripeController::class, 'webhook'])->name('stripe.webhook');
 
 // Authentication Routes (Laravel Breeze)
 require __DIR__.'/auth.php';
@@ -87,6 +101,9 @@ Route::middleware(['auth', 'verified', 'is_admin'])->prefix('admin')->name('admi
     
     // Payment Management Routes
     Route::resource('payments', PaymentController::class);
+    Route::post('/payments/{id}/refund-paypal', [PayPalController::class, 'refund'])->name('payments.refund-paypal');
+    Route::post('/payments/{id}/refund-stripe', [StripeController::class, 'refund'])->name('payments.refund-stripe');
+    Route::get('/payments/{id}/status', [PayPalController::class, 'getPaymentStatus'])->name('payments.status');
     
     // Amenity Management Routes
     Route::resource('amenities', AmenityController::class);

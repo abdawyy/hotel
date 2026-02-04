@@ -166,6 +166,14 @@ class BookingController extends Controller
 
             DB::commit();
 
+            // Check if PayPal is configured and redirect to payment
+            $paypalEnabled = config('services.paypal.client_id') && config('services.paypal.client_secret');
+            
+            if ($paypalEnabled) {
+                return redirect()->route('paypal.payment', $booking->id)
+                    ->with('success', 'Booking created successfully! Please complete your payment.');
+            }
+
             return redirect()->route('booking.confirmation', $booking->id)
                 ->with('success', 'Booking created successfully!');
 

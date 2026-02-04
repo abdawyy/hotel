@@ -79,8 +79,8 @@ class PaymentController extends Controller
         $validated = $request->validate([
             'booking_id' => 'required|exists:bookings,id',
             'amount' => 'required|numeric|min:0',
-            'payment_method' => 'required|in:cash,credit_card,debit_card,bank_transfer,online',
-            'status' => 'required|in:pending,completed,failed',
+            'payment_method' => 'required|in:cash,credit_card,debit_card,bank_transfer,online,paypal',
+            'status' => 'required|in:pending,completed,failed,refunded',
             'transaction_id' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);
@@ -160,8 +160,8 @@ class PaymentController extends Controller
         $validated = $request->validate([
             'booking_id' => 'required|exists:bookings,id',
             'amount' => 'required|numeric|min:0',
-            'payment_method' => 'required|in:cash,credit_card,debit_card,bank_transfer,online',
-            'status' => 'required|in:pending,completed,failed',
+            'payment_method' => 'required|in:cash,credit_card,debit_card,bank_transfer,online,paypal',
+            'status' => 'required|in:pending,completed,failed,refunded',
             'transaction_id' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ]);

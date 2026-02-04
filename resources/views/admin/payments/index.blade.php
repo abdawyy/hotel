@@ -29,6 +29,7 @@
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
                             <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Failed</option>
+                            <option value="refunded" {{ request('status') == 'refunded' ? 'selected' : '' }}>Refunded</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -37,7 +38,9 @@
                             <option value="">All Methods</option>
                             <option value="cash" {{ request('payment_method') == 'cash' ? 'selected' : '' }}>Cash</option>
                             <option value="credit_card" {{ request('payment_method') == 'credit_card' ? 'selected' : '' }}>Credit Card</option>
+                            <option value="debit_card" {{ request('payment_method') == 'debit_card' ? 'selected' : '' }}>Debit Card</option>
                             <option value="bank_transfer" {{ request('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
+                            <option value="paypal" {{ request('payment_method') == 'paypal' ? 'selected' : '' }}>PayPal</option>
                             <option value="online" {{ request('payment_method') == 'online' ? 'selected' : '' }}>Online</option>
                         </select>
                     </div>

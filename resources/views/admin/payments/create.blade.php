@@ -68,6 +68,7 @@
                                     <option value="credit_card" {{ old('payment_method') == 'credit_card' ? 'selected' : '' }}>Credit Card</option>
                                     <option value="debit_card" {{ old('payment_method') == 'debit_card' ? 'selected' : '' }}>Debit Card</option>
                                     <option value="bank_transfer" {{ old('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
+                                    <option value="paypal" {{ old('payment_method') == 'paypal' ? 'selected' : '' }}>PayPal</option>
                                     <option value="online" {{ old('payment_method') == 'online' ? 'selected' : '' }}>Online</option>
                                 </select>
                                 @error('payment_method')
@@ -81,6 +82,7 @@
                                     <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                                     <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
                                     <option value="failed" {{ old('status') == 'failed' ? 'selected' : '' }}>Failed</option>
+                                    <option value="refunded" {{ old('status') == 'refunded' ? 'selected' : '' }}>Refunded</option>
                                 </select>
                                 @error('status')
                                     <div class="invalid-feedback">{{ $message }}</div>

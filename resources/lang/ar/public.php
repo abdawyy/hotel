@@ -102,6 +102,8 @@ return [
     'payment_status' => 'حالة الدفع',
     'paid' => 'مدفوع',
     'pending' => 'قيد الانتظار',
+    'partial' => 'جزئي',
+    'pay_now' => 'ادفع الآن',
     'no_bookings' => 'ليس لديك أي حجوزات بعد.',
     'browse_rooms' => 'تصفح الغرف',
     'cancellation_not_allowed' => 'لا يُسمح بالإلغاء خلال 48 ساعة من تاريخ الوصول',

@@ -142,17 +142,38 @@
                                     <td>{{ \App\Models\Setting::getValue('currency_symbol', '$') }}{{ number_format($booking->final_amount, 2) }}</td>
                                     <td>
                                         @php
-                                            $hasPayment = $booking->payments->where('status', 'completed')->count() > 0;
+                                            $paidAmount = $booking->payments->where('status', 'completed')->sum('amount');
+                                            $remainingBalance = $booking->final_amount - $paidAmount;
+                                            $isPaid = $remainingBalance <= 0;
                                         @endphp
-                                        <span class="badge bg-{{ $hasPayment ? 'success' : 'warning' }}">
-                                            {{ $hasPayment ? __('public.paid') : __('public.pending') }}
-                                        </span>
+                                        @if($isPaid)
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle"></i> {{ __('public.paid') }}
+                                            </span>
+                                        @elseif($paidAmount > 0)
+                                            <span class="badge bg-info">
+                                                {{ __('public.partial') }}
+                                            </span>
+                                            <small class="d-block text-muted">
+                                                {{ \App\Models\Setting::getValue('currency_symbol', '$') }}{{ number_format($paidAmount, 2) }} paid
+                                            </small>
+                                        @else
+                                            <span class="badge bg-warning text-dark">
+                                                {{ __('public.pending') }}
+                                            </span>
+                                        @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('booking.confirmation', $booking->id) }}" class="btn btn-sm btn-info">
-                                            <i class="bi bi-eye"></i> {{ __('public.view') }}
-                                        </a>
-                                        @if(in_array($booking->status, ['pending', 'confirmed']))
+                                        <div class="btn-group-vertical btn-group-sm">
+                                            <a href="{{ route('booking.confirmation', $booking->id) }}" class="btn btn-info">
+                                                <i class="bi bi-eye"></i> {{ __('public.view') }}
+                                            </a>
+                                            @if(!$isPaid && in_array($booking->status, ['pending', 'confirmed']))
+                                                <a href="{{ route('paypal.payment', $booking->id) }}" class="btn btn-warning">
+                                                    <i class="bi bi-credit-card"></i> {{ __('public.pay_now') }}
+                                                </a>
+                                            @endif
+                                            @if(in_array($booking->status, ['pending', 'confirmed']))
                                             @php
                                                 $checkInDate = \Carbon\Carbon::parse($booking->check_in_date);
                                                 $now = \Carbon\Carbon::now();
@@ -168,8 +189,8 @@
                                                     $cancelTitle = 'Cannot cancel this booking';
                                                 }
                                             @endphp
-                                            @if($canCancel)
-                                            <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="d-inline mt-1" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                            @endif
+                                            <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
                                                 @csrf
                                                 @method('POST')
                                                 <button type="submit" class="btn btn-sm btn-danger">
@@ -177,11 +198,12 @@
                                                 </button>
                                             </form>
                                             @else
-                                            <button type="button" class="btn btn-sm btn-secondary mt-1" disabled title="{{ $cancelTitle }}">
+                                            <button type="button" class="btn btn-sm btn-secondary" disabled title="{{ $cancelTitle }}">
                                                 <i class="bi bi-x-circle"></i> {{ __('public.cancel') }}
                                             </button>
                                             @endif
                                         @endif
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach

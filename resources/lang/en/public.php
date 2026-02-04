@@ -102,6 +102,8 @@ return [
     'payment_status' => 'Payment Status',
     'paid' => 'Paid',
     'pending' => 'Pending',
+    'partial' => 'Partial',
+    'pay_now' => 'Pay Now',
     'no_bookings' => 'You don\'t have any bookings yet.',
     'browse_rooms' => 'Browse Rooms',
     'cancellation_not_allowed' => 'Cancellation is not allowed within 48 hours of check-in',

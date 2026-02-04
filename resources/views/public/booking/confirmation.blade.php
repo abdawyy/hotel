@@ -205,10 +205,41 @@
                         <span class="fs-5 text-primary"><strong>{{ \App\Models\Setting::getValue('currency_symbol', '$') }}{{ number_format($booking->final_amount, 2) }}</strong></span>
                     </div>
 
+                    @php
+                        $paidAmount = $booking->payments()->where('status', 'completed')->sum('amount');
+                        $remainingBalance = $booking->final_amount - $paidAmount;
+                    @endphp
+
+                    @if($paidAmount > 0)
+                    <div class="d-flex justify-content-between mb-2 text-success">
+                        <span>Paid:</span>
+                        <strong>-{{ \App\Models\Setting::getValue('currency_symbol', '$') }}{{ number_format($paidAmount, 2) }}</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fs-5"><strong>Balance Due:</strong></span>
+                        <span class="fs-5 {{ $remainingBalance > 0 ? 'text-danger' : 'text-success' }}">
+                            <strong>{{ \App\Models\Setting::getValue('currency_symbol', '$') }}{{ number_format($remainingBalance, 2) }}</strong>
+                        </span>
+                    </div>
+                    @endif
+
+                    @if($remainingBalance > 0 && in_array($booking->status, ['pending', 'confirmed']))
+                    <a href="{{ route('paypal.payment', $booking->id) }}" class="btn btn-warning w-100 mb-3">
+                        <i class="bi bi-paypal me-2"></i>Pay with PayPal
+                    </a>
+                    @elseif($remainingBalance <= 0)
+                    <div class="alert alert-success mb-0">
+                        <i class="bi bi-check-circle me-2"></i>
+                        <strong>Payment Complete!</strong><br>
+                        <small>Your booking has been fully paid.</small>
+                    </div>
+                    @else
                     <div class="alert alert-info mb-0">
                         <i class="bi bi-info-circle"></i> 
                         <small>Payment instructions will be sent via email.</small>
                     </div>
+                    @endif
                 </div>
             </div>
 
