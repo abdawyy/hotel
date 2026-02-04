@@ -7,6 +7,7 @@ return [
     'my_bookings' => 'My Bookings',
     'profile' => 'Profile',
     'admin_dashboard' => 'Admin Dashboard',
+    'admin_panel' => 'Admin',
     'logout' => 'Logout',
     'login' => 'Login',
     'register' => 'Register',
@@ -36,6 +37,9 @@ return [
     'unavailable' => 'Unavailable',
     'no_rooms_found' => 'No rooms found',
     'adjust_search' => 'Please adjust your search criteria and try again.',
+    'showing_available_rooms' => 'Showing available rooms for',
+    'clear_search' => 'Clear Search',
+    'nights' => 'Nights',
 
     // Room Details
     'room_details' => 'Room Details',

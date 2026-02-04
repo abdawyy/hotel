@@ -88,6 +88,33 @@ class RoomType extends Model
     }
 
     /**
+     * Scope to filter room types that have availability between given dates.
+     * Only returns room types where at least one room is available for ALL nights in the range.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Carbon\Carbon|string  $checkIn
+     * @param  \Carbon\Carbon|string  $checkOut
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAvailableBetween($query, $checkIn, $checkOut)
+    {
+        $checkIn = \Carbon\Carbon::parse($checkIn);
+        $checkOut = \Carbon\Carbon::parse($checkOut);
+
+        return $query->where(function ($q) use ($checkIn, $checkOut) {
+            $q->whereRaw('total_rooms > (
+                SELECT COALESCE(SUM(bd.quantity), 0)
+                FROM booking_details bd
+                INNER JOIN bookings b ON bd.booking_id = b.id
+                WHERE bd.room_type_id = room_types.id
+                AND b.check_in_date < ?
+                AND b.check_out_date > ?
+                AND b.status NOT IN (?, ?)
+            )', [$checkOut, $checkIn, 'cancelled', 'checked_out']);
+        });
+    }
+
+    /**
      * Get available rooms count for a date range.
      * Uses total_rooms as the cap: only that many can be reserved at the same time.
      * If all total_rooms are already booked for overlapping dates, returns 0.
