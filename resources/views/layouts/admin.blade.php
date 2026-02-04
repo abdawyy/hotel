@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ \App\Http\Controllers\LanguageController::isRtl(app()->getLocale()) ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -204,12 +204,26 @@
                             </button>
 
                             <div class="dropdown">
+                                @php
+                                    $languages = \App\Http\Controllers\LanguageController::getAvailableLanguages();
+                                    $currentLang = $languages[app()->getLocale()] ?? $languages['en'];
+                                @endphp
                                 <button class="btn btn-sm btn-white border dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown">
-                                    {{ strtoupper(app()->getLocale()) }}
+                                    {{ $currentLang['flag'] }} {{ strtoupper(app()->getLocale()) }}
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-3">
-                                    <li><a class="dropdown-item" href="{{ route('language.switch', 'en') }}">English</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('language.switch', 'ar') }}">العربية</a></li>
+                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-3" style="max-height: 350px; overflow-y: auto;">
+                                    @foreach($languages as $code => $lang)
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center {{ app()->getLocale() == $code ? 'active' : '' }}" 
+                                               href="{{ route('language.switch', $code) }}">
+                                                <span class="me-2">{{ $lang['flag'] }}</span>
+                                                <span>{{ $lang['native'] }}</span>
+                                                @if(app()->getLocale() == $code)
+                                                    <i class="bi bi-check2 ms-auto"></i>
+                                                @endif
+                                            </a>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
 

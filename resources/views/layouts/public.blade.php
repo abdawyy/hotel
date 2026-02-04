@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ \App\Http\Controllers\LanguageController::isRtl(app()->getLocale()) ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -188,11 +188,26 @@
                         <!-- Language Switcher -->
                         <div class="dropdown">
                             <button class="btn btn-sm text-light px-3 bg-white bg-opacity-10 rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-globe2 me-1"></i> {{ strtoupper(app()->getLocale()) }}
+                                <i class="bi bi-globe2 me-1"></i> 
+                                @php
+                                    $languages = \App\Http\Controllers\LanguageController::getAvailableLanguages();
+                                    $currentLang = $languages[app()->getLocale()] ?? $languages['en'];
+                                @endphp
+                                {{ $currentLang['flag'] }} {{ strtoupper(app()->getLocale()) }}
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end mt-2 border-0 shadow">
-                                <li><a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ route('language.switch', 'en') }}"><span class="me-2">🇺🇸</span> English</a></li>
-                                <li><a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}" href="{{ route('language.switch', 'ar') }}"><span class="me-2">🇸🇦</span> العربية</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end mt-2 border-0 shadow" style="max-height: 400px; overflow-y: auto;">
+                                @foreach($languages as $code => $lang)
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center {{ app()->getLocale() == $code ? 'active' : '' }}" 
+                                           href="{{ route('language.switch', $code) }}">
+                                            <span class="me-2">{{ $lang['flag'] }}</span>
+                                            <span>{{ $lang['native'] }}</span>
+                                            @if(app()->getLocale() == $code)
+                                                <i class="bi bi-check2 ms-auto"></i>
+                                            @endif
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                         <!-- Theme Toggle -->
